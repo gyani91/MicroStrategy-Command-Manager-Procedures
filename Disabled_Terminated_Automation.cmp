@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<PROCEDURE_DEFINITION>
+<DESCRIPTION/>
+<CODE>ArrayList&lt;String&gt; members = new ArrayList&lt;String&gt;();&#13;
+// add all the users here&#13;
+members.add("206067893");&#13;
+members.add("206081070");&#13;
+members.add("206103938");&#13;
+members.add("206097760");&#13;
+members.add("206416360");&#13;
+members.add("206107065");&#13;
+members.add("206075929");&#13;
+members.add("206097721");&#13;
+members.add("206465734");&#13;
+&#13;
+&#13;
+// loop to iterate each user &#13;
+for(String user : members)&#13;
+{&#13;
+	String query = "LIST GROUPS FOR USER " + "\"" + user + "\"" + ";";&#13;
+	ResultSet Groups= executeCapture(query);&#13;
+	printOut(user);&#13;
+	Groups.moveFirst();&#13;
+	&#13;
+	// loop to iterate each group this user belongs to&#13;
+	while(!Groups.isEof())&#13;
+	{		&#13;
+		ResultSet group=(ResultSet)Groups.getFieldValue(USER_GROUP_RESULTSET);&#13;
+		group.moveFirst();	&#13;
+	         	while(!group.isEof())&#13;
+		{&#13;
+		String groupname = group.getFieldValueString(USER_GROUP);&#13;
+	                	if(!groupname.equals("Everyone"))&#13;
+			{&#13;
+				printOut("Removing " + user + " from group " + groupname);&#13;
+				// delete user from every group he/she belongs to, except EVERYONE&#13;
+				executeCapture("REMOVE USER " + "\"" + user + "\"" + " FROM GROUP " + "\"" + groupname + "\"" + ";");&#13;
+			}&#13;
+	                 	group.moveNext();&#13;
+	           	}&#13;
+	Groups.moveNext();&#13;
+	}&#13;
+	// disabling the user&#13;
+	printOut("Disabling the User");&#13;
+	executeCapture("ALTER USER " + "\"" + user + "\"" + " DISABLED;");&#13;
+&#13;
+	// adding the user to Disabled - Terminated group&#13;
+	printOut("Adding the user to Disabled - Terminated group");&#13;
+	executeCapture("ADD USER " + "\"" + user + "\"" + " TO GROUP \"Disabled - Terminated\" ;");&#13;
+	printOut("===================");&#13;
+} </CODE>
+<SAMPLE/>
+<VERSION/>
+<TYPE>CUSTOM</TYPE>
+<INPUT_PARAMS/>
+<CLASSPATH/>
+<TEST_INPUT/>
+<TEST_CONNECTION_INFO>
+<TEST_PSN_NAME>USHAPWP00541 - Prd</TEST_PSN_NAME>
+<TEST_USERNAME>administrator</TEST_USERNAME>
+<TEST_PASSWORD>000000005b8b4a290832b467c0c9116c7e673e53f44ecaa269c42a3675871b23c0c2a2cb2f7ee6cb74d184f98cacfeb6</TEST_PASSWORD>
+</TEST_CONNECTION_INFO>
+</PROCEDURE_DEFINITION>

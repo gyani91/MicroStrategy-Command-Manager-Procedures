@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<PROCEDURE_DEFINITION>
+<DESCRIPTION/>
+<CODE>Calendar oTime = Calendar.getInstance();&#13;
+oTime.set(Calendar.MONTH, oTime.get(Calendar.MONTH) - MonthsBefore);//Set the number of month&#13;
+oTime.set(Calendar.DAY_OF_MONTH, oTime.get(Calendar.DAY_OF_MONTH) - DateOfCurrentMonth);//Set Today's Date&#13;
+//printOut(oTime.getTime());&#13;
+&#13;
+ResultSet Users = executeCapture("LIST ALL PROPERTIES FOR USERS IN GROUP \"Disabled - Terminated\";");&#13;
+Users.moveFirst();&#13;
+&#13;
+while(!Users.isEof())&#13;
+{&#13;
+	Date modDate = (Date) Users.getFieldValue(DisplayPropertyEnum.MODIFICATION_TIME);                 &#13;
+&#13;
+	//Check the Accounts older than entered months&#13;
+	if((modDate != null) &amp;&amp; (modDate.before(oTime.getTime())))&#13;
+	{&#13;
+		String User = Users.getFieldValueString(LOGIN);&#13;
+		printOut("Account " + User + " was last modified on " + modDate.toString());&#13;
+		//Delete older Accounts&#13;
+		execute("DELETE USER "+ "\"" + User + "\"" + " CASCADE PROFILES;");&#13;
+	}&#13;
+	Users.moveNext();&#13;
+}&#13;
+</CODE>
+<SAMPLE/>
+<VERSION/>
+<TYPE>CUSTOM</TYPE>
+<INPUT_PARAMS>
+<INPUT INPUT_TYPE="INT">MonthsBefore</INPUT>
+<INPUT INPUT_TYPE="INT">DateOfCurrentMonth</INPUT>
+</INPUT_PARAMS>
+<CLASSPATH/>
+<TEST_INPUT>
+<TEST_INPUT_PARAM>3</TEST_INPUT_PARAM>
+<TEST_INPUT_PARAM>1</TEST_INPUT_PARAM>
+</TEST_INPUT>
+<TEST_CONNECTION_INFO>
+<TEST_PSN_NAME>USHAPWP00541 - Prd</TEST_PSN_NAME>
+<TEST_USERNAME>administrator</TEST_USERNAME>
+<TEST_PASSWORD>000000005b8b4a290832b467c0c9116c7e673e53f44ecaa269c42a3675871b23c0c2a2cb2f7ee6cb74d184f98cacfeb6</TEST_PASSWORD>
+</TEST_CONNECTION_INFO>
+</PROCEDURE_DEFINITION>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<PROCEDURE_DEFINITION>
+<DESCRIPTION/>
+<CODE>ResultSet Users = executeCapture("LIST ALL PROPERTIES FOR USERS IN GROUP \"Everyone\";");&#13;
+Users.moveFirst();&#13;
+&#13;
+while(!Users.isEof())&#13;
+{&#13;
+	//String Mode = Users.getFieldValueString(ALLOW_STANDARD_AUTHENTICATION);&#13;
+	Boolean Mode = (Boolean) Users.getResultCell(ALLOW_STANDARD_AUTHENTICATION).getValue();&#13;
+	String User = Users.getFieldValueString(LOGIN);&#13;
+	String Name= Users.getFieldValueString(FULL_NAME);&#13;
+	&#13;
+	if(Mode) //Check if Allow Standard Authentication is true&#13;
+	{&#13;
+		// Add exceptions here&#13;
+		if(!User.toLowerCase().equals("administrator") &amp;&amp; !User.toLowerCase().equals("svcmicrostrategy") &amp;&amp; !User.toLowerCase().equals("206442196") &amp;&amp;&#13;
+		!User.toLowerCase().equals("206479083") &amp;&amp; !User.toLowerCase().equals("commandmanager") &amp;&amp; !User.toLowerCase().equals("integritymanager") &amp;&amp;&#13;
+		!User.toLowerCase().equals("502101207") &amp;&amp; !User.toLowerCase().equals("test4") &amp;&amp; !User.toLowerCase().equals("test5") &amp;&amp;&#13;
+		!User.toLowerCase().equals("test6") &amp;&amp; !User.toLowerCase().equals("new user group") &amp;&amp; !User.toLowerCase().equals("objectmanager") &amp;&amp;&#13;
+		!User.toLowerCase().equals("206477316") &amp;&amp; !User.toLowerCase().equals("206101668") &amp;&amp; !User.toLowerCase().equals("svcmicrostrategy1") &amp;&amp;&#13;
+		!User.toLowerCase().equals("linear user") &amp;&amp; !User.toLowerCase().equals("entertainment user") &amp;&amp; !User.toLowerCase().equals("hispanic user") &amp;&amp;&#13;
+		!User.toLowerCase().equals("lifestyle user") &amp;&amp; !User.toLowerCase().equals("live news user") &amp;&amp; !User.toLowerCase().equals("live sports user"))&#13;
+		{&#13;
+			printOut("Allow Standard Authentication for " + User + " " + Name + " was " + Mode);&#13;
+			//Set the Standard Authentication to false&#13;
+			execute("ALTER USER " + "\"" + User + "\"" + " ALLOWSTDAUTH FALSE;");&#13;
+ 		}&#13;
+	}&#13;
+	Users.moveNext();&#13;
+}&#13;
+</CODE>
+<SAMPLE/>
+<VERSION/>
+<TYPE>CUSTOM</TYPE>
+<INPUT_PARAMS/>
+<CLASSPATH/>
+<TEST_INPUT/>
+<TEST_CONNECTION_INFO>
+<TEST_PSN_NAME>USHAPWP00541 - Prd</TEST_PSN_NAME>
+<TEST_USERNAME>administrator</TEST_USERNAME>
+<TEST_PASSWORD>000000005b8b4a290832b467c0c9116c7e673e53f44ecaa269c42a3675871b23c0c2a2cb2f7ee6cb74d184f98cacfeb6</TEST_PASSWORD>
+</TEST_CONNECTION_INFO>
+</PROCEDURE_DEFINITION>
